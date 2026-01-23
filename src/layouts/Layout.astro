@@ -93,19 +93,24 @@ const { lang } = Astro.props;
 
 	:root[data-theme="light"] {
 		/* LIGHT THEME */
-		--color-bg: #ffffff;
-		--color-bg-soft: rgba(251, 213, 229, 0.15); /* Light Pink #fbd5e5 with opacity */
+		--color-bg: #fbd5e5; /* Light Pink */
+		--color-bg-soft: #f7bfd8; /* Pink */
 		--color-text: #2c2c2c;
 		--color-text-muted: #555555;
 		--color-accent: #81638b; /* Dark Purple */
 		--color-accent-glow: rgba(129, 99, 139, 0.2);
 
 		/* Component Specifics - Light */
-		--header-bg: rgba(255, 255, 255, 0.85);
+		--header-bg: rgba(
+			251,
+			213,
+			229,
+			0.85
+		); /* Semi-transparent Light Pink */
 		--header-border: rgba(0, 0, 0, 0.05);
 
 		--hero-gradient-start: #dac9df; /* Light Purple */
-		--hero-gradient-end: #ffffff;
+		--hero-gradient-end: #fbd5e5; /* Match Main BG */
 		--hero-deco: rgba(129, 99, 139, 0.05);
 
 		--button-primary-text: #ffffff;

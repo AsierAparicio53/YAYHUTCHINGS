@@ -15,6 +15,7 @@ const t = useTranslations(lang);
             <!-- LIBRO 1 -->
             <article class="book-card">
                 <div class="book-visual">
+                    <div class="book-deco"></div>
                     <div class="book-cover">
                         <div class="book-front">
                             <img
@@ -43,7 +44,10 @@ const t = useTranslations(lang);
                     </ul>
                     <div class="price-action">
                         <span class="price">15.00€</span>
-                        <a href="#" class="btn-buy">{t("btn.buy")}</a>
+                        <a
+                            href="https://www.casadellibro.com/libro-viviendo-de-dolor/9788410828421/16485948"
+                            class="btn-buy">{t("btn.buy")}</a
+                        >
                     </div>
                 </div>
             </article>
@@ -51,6 +55,7 @@ const t = useTranslations(lang);
             <!-- LIBRO 2 -->
             <article class="book-card reverse">
                 <div class="book-visual">
+                    <div class="book-deco"></div>
                     <div class="book-cover">
                         <div class="book-front">
                             <!-- Portada Placeholder -->
@@ -203,16 +208,16 @@ const t = useTranslations(lang);
         transform: rotateY(-90deg) translateX(-20px);
         transform-origin: left;
     }
-    .image-deco {
+    .book-deco {
         position: absolute;
-        top: -20px;
-        left: -20px;
-        width: 60%;
-        bottom: 20px;
+        top: 6%;
+        left: 8%;
+        width: 100%;
+        height: 100%;
         border: 1px solid var(--color-accent);
         z-index: 0;
+        pointer-events: none;
         opacity: 0.5;
-        /* Hide decorative border if image is centered or behaves differently? Keeping it but adjusting position */
     }
     /* Back cover content styling */
     .back-content {
@@ -272,18 +277,7 @@ const t = useTranslations(lang);
         color: var(--color-text-muted);
     }
 
-    /* Book Spine Effect */
-    .book-cover::before {
-        content: "";
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 40px;
-        height: 100%;
-        background: rgba(255, 255, 255, 0.05);
-        transform: translateX(-20px) rotateY(-90deg);
-        transform-origin: left;
-    }
+    /* Book Spine Effect - REMOVED */
 
     .book-info h3 {
         font-size: 2.5rem;
