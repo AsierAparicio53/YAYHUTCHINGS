@@ -70,7 +70,6 @@ const t = useTranslations(lang);
                         </div>
                         <div class="book-spine"></div>
                     </div>
-                    <div class="book-shadow"></div>
                 </div>
                 <div class="book-info">
                     <h3>{t("book2.title")}</h3>
@@ -204,7 +203,17 @@ const t = useTranslations(lang);
         transform: rotateY(-90deg) translateX(-20px);
         transform-origin: left;
     }
-
+    .image-deco {
+        position: absolute;
+        top: -20px;
+        left: -20px;
+        width: 60%;
+        bottom: 20px;
+        border: 1px solid var(--color-accent);
+        z-index: 0;
+        opacity: 0.5;
+        /* Hide decorative border if image is centered or behaves differently? Keeping it but adjusting position */
+    }
     /* Back cover content styling */
     .back-content {
         padding: 40px;
