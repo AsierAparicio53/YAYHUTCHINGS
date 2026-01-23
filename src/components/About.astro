@@ -1,0 +1,150 @@
+---
+import { useTranslations } from "../i18n/utils";
+const lang = Astro.props.lang || "es";
+const t = useTranslations(lang);
+---
+
+<section id="autora" class="section-padding about">
+    <div class="container">
+        <div class="about-grid">
+            <div class="about-image">
+                <div class="image-container">
+                    <img
+                        src="/Autora.jpeg"
+                        alt="Yay Hutchings"
+                        class="author-photo"
+                    />
+                </div>
+                <div class="image-deco"></div>
+            </div>
+            <div class="about-content">
+                <span class="eyebrow">{t("about.eyebrow")}</span>
+                <h2>
+                    {t("about.title")}
+                    <span class="accent-text">{t("about.title.span")}</span>
+                </h2>
+                <div class="bio-text">
+                    <p>{t("about.bio1")}</p>
+                    <p>{t("about.bio2")}</p>
+                    <p>{t("about.bio3")}</p>
+                </div>
+                <div class="signature">{t("about.signature")}</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .about {
+        background: var(--color-bg-soft);
+        transition: background-color 0.3s ease;
+    }
+
+    .about-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 80px;
+        align-items: center;
+    }
+
+    .about-image {
+        position: relative;
+        display: flex;
+        justify-content: center; /* Center image in column */
+    }
+
+    .image-container {
+        width: 100%;
+        max-width: 400px; /* Sizing limit */
+        height: auto;
+        aspect-ratio: auto;
+        position: relative;
+        z-index: 1;
+        overflow: hidden;
+        border-radius: 4px;
+    }
+
+    .author-photo {
+        width: 100%;
+        height: auto;
+        display: block;
+        filter: grayscale(20%);
+        transition: filter 0.3s ease;
+    }
+
+    .author-photo:hover {
+        filter: grayscale(0%);
+    }
+
+    /* Shadow for image in light mode */
+    :global([data-theme="light"]) .image-container {
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .image-deco {
+        position: absolute;
+        top: -20px;
+        left: -20px;
+        width: 60%;
+        bottom: 20px;
+        border: 1px solid var(--color-accent);
+        z-index: 0;
+        opacity: 0.5;
+        /* Hide decorative border if image is centered or behaves differently? Keeping it but adjusting position */
+    }
+
+    /* Adjust deco for centered image */
+    .about-image:has(.image-container) .image-deco {
+        left: 10%; /* Approximate */
+    }
+
+    .eyebrow {
+        font-family: var(--font-sans);
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--color-accent);
+        font-size: 0.8rem;
+        margin-bottom: 20px;
+        display: block;
+    }
+
+    h2 {
+        font-size: 3.5rem;
+        margin-bottom: 40px;
+        line-height: 1.1;
+        color: var(--color-text);
+    }
+
+    .accent-text {
+        font-style: italic;
+        color: var(--color-text-muted);
+    }
+
+    .bio-text p {
+        font-size: 1.1rem;
+        margin-bottom: 1.5rem;
+        color: var(--color-text-muted);
+    }
+
+    .signature {
+        font-family: var(--font-serif);
+        font-style: italic;
+        font-size: 2rem;
+        margin-top: 30px;
+        color: var(--color-accent);
+    }
+
+    @media (max-width: 900px) {
+        .about-grid {
+            grid-template-columns: 1fr;
+            gap: 50px;
+        }
+        h2 {
+            font-size: 2.5rem;
+        }
+
+        .about-image {
+            justify-content: center;
+        }
+    }
+</style>

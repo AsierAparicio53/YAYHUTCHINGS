@@ -1,0 +1,250 @@
+---
+import { getLangFromUrl, useTranslations } from "../i18n/utils";
+
+const lang = Astro.props.lang || "es";
+const t = useTranslations(lang);
+---
+
+<header class="header">
+    <div class="container header-content">
+        <a href="#" class="logo">Yay Hutchings</a>
+        <nav class="nav">
+            <a href="#inicio">{t("nav.home")}</a>
+            <a href="#autora">{t("nav.about")}</a>
+            <a href="#libros">{t("nav.books")}</a>
+
+            <div class="controls">
+                <button
+                    id="theme-toggle"
+                    class="btn-icon"
+                    aria-label="Toggle Theme"
+                >
+                    <!-- Sun Icon (Visible in Dark Mode -> Click to switch to Light) -->
+                    <svg
+                        class="sun-icon"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="22"
+                        height="22"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        ><circle cx="12" cy="12" r="5"></circle><line
+                            x1="12"
+                            y1="1"
+                            x2="12"
+                            y2="3"></line><line x1="12" y1="21" x2="12" y2="23"
+                        ></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"
+                        ></line><line
+                            x1="18.36"
+                            y1="18.36"
+                            x2="19.78"
+                            y2="19.78"></line><line
+                            x1="1"
+                            y1="12"
+                            x2="3"
+                            y2="12"></line><line x1="21" y1="12" x2="23" y2="12"
+                        ></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"
+                        ></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"
+                        ></line></svg
+                    >
+                    <!-- Moon Icon (Visible in Light Mode -> Click to switch to Dark) -->
+                    <svg
+                        class="moon-icon"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="22"
+                        height="22"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        ><path
+                            d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"
+                        ></path></svg
+                    >
+                </button>
+
+                <a
+                    href={lang === "es" ? "/en" : "/"}
+                    class="btn-lang"
+                    aria-label="Switch Language"
+                >
+                    {lang === "es" ? "EN" : "ES"}
+                </a>
+            </div>
+
+            <a href="#contacto" class="btn-contact">{t("nav.contact")}</a>
+        </nav>
+    </div>
+</header>
+
+<script>
+    const themeToggle = document.getElementById("theme-toggle");
+    const handleToggleClick = () => {
+        const element = document.documentElement;
+        const currentTheme = element.getAttribute("data-theme");
+        const isDark = currentTheme === "dark";
+        const newTheme = isDark ? "light" : "dark";
+
+        element.setAttribute("data-theme", newTheme);
+        localStorage.setItem("theme", newTheme);
+    };
+
+    themeToggle?.addEventListener("click", handleToggleClick);
+</script>
+
+<style>
+    .header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 20px 0;
+        z-index: 1000;
+        transition:
+            background 0.3s ease,
+            padding 0.3s ease,
+            box-shadow 0.3s ease;
+        backdrop-filter: blur(10px);
+        background: var(--header-bg);
+        border-bottom: 1px solid var(--header-border);
+    }
+
+    /* Light mode shadow */
+    :global([data-theme="light"]) .header {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        border-bottom-color: transparent;
+    }
+
+    .header-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .logo {
+        font-family: var(--font-serif);
+        font-size: 1.5rem;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        color: var(--color-text);
+    }
+
+    .nav {
+        display: flex;
+        gap: 30px;
+        align-items: center;
+    }
+
+    .nav a {
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--color-text-muted);
+        position: relative;
+    }
+
+    .nav a:hover,
+    .nav a.active {
+        color: var(--color-text);
+    }
+
+    .nav a::after {
+        content: "";
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 0;
+        height: 1px;
+        background: var(--color-accent);
+        transition: width 0.3s ease;
+    }
+
+    .nav a:hover::after {
+        width: 100%;
+    }
+
+    /* Controls */
+    .controls {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+        margin-right: 15px;
+        border-left: 1px solid var(--header-border);
+        padding-left: 20px;
+    }
+
+    .btn-icon {
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        color: var(--color-text);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        transition:
+            color 0.3s ease,
+            transform 0.3s ease;
+    }
+
+    .btn-icon:hover {
+        color: var(--color-accent);
+        transform: rotate(15deg);
+    }
+
+    .btn-lang {
+        font-weight: 600;
+        font-size: 0.8rem !important;
+        color: var(--color-text) !important;
+    }
+    .btn-lang:hover {
+        color: var(--color-accent) !important;
+    }
+    .btn-lang::after {
+        display: none;
+    }
+
+    /* Icon Visibility Logic */
+    .sun-icon {
+        display: block;
+    }
+    .moon-icon {
+        display: none;
+    }
+
+    :global([data-theme="light"]) .sun-icon {
+        display: none;
+    }
+    :global([data-theme="light"]) .moon-icon {
+        display: block;
+    }
+
+    /* Contact Button */
+    .btn-contact {
+        border: 1px solid var(--button-secondary-border);
+        padding: 8px 20px;
+        border-radius: 50px;
+        transition: all 0.3s ease;
+        color: var(--color-text) !important;
+    }
+
+    .btn-contact:hover {
+        border-color: var(--color-accent) !important;
+        background: var(--button-secondary-hover-bg);
+        color: var(--color-accent) !important;
+    }
+    .btn-contact::after {
+        display: none;
+    }
+
+    @media (max-width: 768px) {
+        .nav {
+            /* display: none; */
+        }
+    }
+</style>

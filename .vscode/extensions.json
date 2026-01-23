@@ -1,0 +1,7 @@
+{
+  "recommendations": [
+    "astro-build.astro-vscode",
+    "Webnative.webnative"
+  ],
+  "unwantedRecommendations": []
+}

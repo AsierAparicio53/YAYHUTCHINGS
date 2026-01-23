@@ -1,0 +1,195 @@
+---
+const { lang } = Astro.props;
+---
+
+<!doctype html>
+<html lang={lang || "es"}>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<meta
+			name="description"
+			content="Sitio oficial de la autora de poesía independiente."
+		/>
+		<title>Yay Hutchings | Poesía Independiente</title>
+
+		<!-- Google Fonts -->
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap"
+			rel="stylesheet"
+		/>
+
+		<script is:inline>
+			const theme = (() => {
+				if (
+					typeof localStorage !== "undefined" &&
+					localStorage.getItem("theme")
+				) {
+					return localStorage.getItem("theme");
+				}
+				if (
+					window.matchMedia("(prefers-color-scheme: light)").matches
+				) {
+					return "light";
+				}
+				return "dark";
+			})();
+
+			if (theme === "light") {
+				document.documentElement.setAttribute("data-theme", "light");
+			} else {
+				document.documentElement.setAttribute("data-theme", "dark");
+			}
+			window.localStorage.setItem("theme", theme);
+		</script>
+	</head>
+	<body>
+		<slot />
+	</body>
+</html>
+
+<style is:global>
+	:root {
+		/* Typography */
+		--font-serif: "Cormorant Garamond", serif;
+		--font-sans: "Montserrat", sans-serif;
+
+		/* DARK THEME (Default) */
+		--color-bg: #0a0a0a;
+		--color-bg-soft: #141414;
+		--color-text: #e0e0e0;
+		--color-text-muted: #a0a0a0;
+		--color-accent: #d4af37; /* Gold */
+		--color-accent-glow: rgba(212, 175, 55, 0.3);
+
+		/* Component Specifics - Dark */
+		--header-bg: rgba(10, 10, 10, 0.8);
+		--header-border: rgba(255, 255, 255, 0.05);
+
+		--hero-gradient-start: #1a1a1a;
+		--hero-gradient-end: #0a0a0a;
+		--hero-deco: rgba(212, 175, 55, 0.03);
+
+		--button-primary-text: #000000;
+		--button-secondary-border: rgba(255, 255, 255, 0.3);
+		--button-secondary-hover-bg: rgba(255, 255, 255, 0.05);
+
+		--image-placeholder-bg: #2a2a2a;
+		--image-placeholder-color: #555555;
+		--image-placeholder-grad-1: #222;
+		--image-placeholder-grad-2: #333;
+
+		--card-bg: #1e1e1e;
+		--book-spine: #111;
+		--card-shadow: rgba(0, 0, 0, 0.5);
+
+		--footer-bg: #050505;
+		--footer-border: rgba(255, 255, 255, 0.05);
+	}
+
+	:root[data-theme="light"] {
+		/* LIGHT THEME */
+		--color-bg: #ffffff;
+		--color-bg-soft: #f8f8f8;
+		--color-text: #2c2c2c;
+		--color-text-muted: #555555;
+		--color-accent: #b8860b; /* Dark Goldenrod */
+		--color-accent-glow: rgba(184, 134, 11, 0.2);
+
+		/* Component Specifics - Light */
+		--header-bg: rgba(255, 255, 255, 0.85);
+		--header-border: rgba(0, 0, 0, 0.05);
+
+		--hero-gradient-start: #f0f0f0;
+		--hero-gradient-end: #ffffff;
+		--hero-deco: rgba(184, 134, 11, 0.05);
+
+		--button-primary-text: #ffffff;
+		--button-secondary-border: rgba(0, 0, 0, 0.2);
+		--button-secondary-hover-bg: rgba(0, 0, 0, 0.05);
+
+		--image-placeholder-bg: #e0e0e0;
+		--image-placeholder-color: #999999;
+		--image-placeholder-grad-1: #ddd;
+		--image-placeholder-grad-2: #eee;
+
+		--card-bg: #ffffff;
+		--book-spine: #e0e0e0;
+		--card-shadow: rgba(0, 0, 0, 0.1);
+
+		--footer-bg: #f9f9f9;
+		--footer-border: rgba(0, 0, 0, 0.05);
+	}
+
+	html {
+		font-family: var(--font-sans);
+		background: var(--color-bg);
+		color: var(--color-text);
+		scroll-behavior: smooth;
+		transition:
+			background-color 0.3s ease,
+			color 0.3s ease;
+	}
+
+	body {
+		margin: 0;
+		padding: 0;
+		overflow-x: hidden;
+		line-height: 1.6;
+		background-color: var(--color-bg);
+		transition: background-color 0.3s ease;
+	}
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		font-family: var(--font-serif);
+		color: var(--color-text);
+		margin: 0;
+		font-weight: 400;
+	}
+
+	p {
+		color: var(--color-text-muted);
+		margin-bottom: 1rem;
+	}
+
+	a {
+		text-decoration: none;
+		color: inherit;
+		transition: color 0.3s ease;
+	}
+
+	/* Utility Classes */
+	.container {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 0 20px;
+	}
+
+	.section-padding {
+		padding: 100px 0;
+	}
+
+	/* Scrollbar */
+	::-webkit-scrollbar {
+		width: 8px;
+	}
+	::-webkit-scrollbar-track {
+		background: var(--color-bg);
+	}
+	::-webkit-scrollbar-thumb {
+		background: #888;
+		border-radius: 4px;
+	}
+	::-webkit-scrollbar-thumb:hover {
+		background: var(--color-accent);
+	}
+</style>
