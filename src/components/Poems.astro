@@ -1,0 +1,242 @@
+---
+import poemsData from "../data/poems.json";
+---
+
+<section id="poemas" class="section-padding poems-section">
+    <div class="container">
+        <div class="poems-container">
+            {
+                poemsData.map((poem, index) => (
+                    <div class="poem-entry" data-index={index}>
+                        <div class="poem-wrapper">
+                            <div class="poem-item">
+                                <button class="poem-trigger">
+                                    <span class="poem-title">{poem.title}</span>
+                                    <span class="poem-arrow">v</span>
+                                </button>
+                                <div class="poem-content">
+                                    <div class="poem-inner">
+                                        {poem.content
+                                            .split("\n")
+                                            .map((line) => (
+                                                <p>{line}</p>
+                                            ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                ))
+            }
+        </div>
+    </div>
+</section>
+
+<style>
+    .poems-section {
+        background: var(--color-bg);
+        padding-top: 40px;
+        padding-bottom: 80px;
+        overflow: hidden;
+    }
+
+    .poems-header-line {
+        width: 100%;
+        height: 2px;
+        background: var(--color-text);
+        margin-bottom: 60px;
+    }
+
+    .poems-container {
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        gap: 0;
+    }
+
+    .poem-entry {
+        display: block;
+        flex: 1 0 25%; /* Default: 4 per line, but can grow */
+        margin-bottom: 40px;
+        min-width: 0;
+    }
+
+    /* Limits & Wrapping */
+    /* XXL/Desktop: 4 per line */
+    @media (min-width: 1200px) {
+        .poem-entry {
+            flex: 1 0 25%;
+        }
+        .poem-entry:nth-child(4n) .poem-separator {
+            display: none;
+        }
+    }
+
+    /* Large Tablet / Desktop Small: 3 per line */
+    @media (min-width: 769px) and (max-width: 1199px) {
+        .poem-entry {
+            flex: 1 0 33.333%;
+        }
+        /* Show all separators first to reset */
+        .poem-entry .poem-separator {
+            display: block;
+        }
+        .poem-entry:nth-child(3n) .poem-separator {
+            display: none;
+        }
+    }
+
+    /* Mobile/Tablet: 2 per line */
+    @media (min-width: 481px) and (max-width: 768px) {
+        .poem-entry {
+            flex: 1 0 50%;
+        }
+        .poem-entry .poem-separator {
+            display: block;
+        }
+        .poem-entry:nth-child(2n) .poem-separator {
+            display: none;
+        }
+    }
+
+    /* Tiny screens: 1 per line */
+    @media (max-width: 480px) {
+        .poem-entry {
+            flex: 1 0 100%;
+            margin-bottom: 20px;
+        }
+        /* Hide ALL separators since they are on separate lines */
+        .poem-entry .poem-separator {
+            display: none;
+        }
+    }
+
+    .poem-wrapper {
+        display: flex;
+        align-items: center;
+        width: 100%;
+    }
+
+    .poem-item {
+        flex: 1;
+        position: relative;
+    }
+
+    .poem-trigger {
+        width: 100%;
+        background: none;
+        border: none;
+        padding: 10px 0;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 15px;
+        font-family: var(--font-serif);
+        font-size: 1.6rem;
+        color: var(--color-text);
+        text-align: left;
+        transition: color 0.3s ease;
+        position: relative;
+    }
+
+    /* Underline style from image */
+    .poem-trigger::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 80%;
+        height: 1px;
+        background: var(--color-text);
+        opacity: 0.3;
+    }
+
+    .poem-trigger:hover {
+        color: var(--color-accent);
+    }
+
+    .poem-title {
+        white-space: nowrap;
+    }
+
+    .poem-arrow {
+        font-size: 0.9rem;
+        transition: transform 0.3s ease;
+        margin-left: 5px;
+    }
+
+    .item-active .poem-arrow {
+        transform: rotate(180deg);
+    }
+
+    .poem-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        width: 100%;
+    }
+
+    .item-active .poem-content {
+        max-height: 500px; /* Adjust as needed */
+    }
+
+    .poem-inner {
+        padding: 25px 0;
+        font-family: var(--font-serif);
+        font-style: italic;
+        line-height: 1.7;
+        color: var(--color-text-muted);
+        font-size: 1.1rem;
+    }
+
+    .poem-inner p {
+        margin-bottom: 0.5rem;
+    }
+
+    .poem-separator {
+        font-family: var(--font-serif);
+        font-size: 2.2rem;
+        padding: 0 20px;
+        color: var(--color-text);
+        opacity: 0.6;
+        user-select: none;
+    }
+
+    @media (max-width: 480px) {
+        .poem-trigger {
+            font-size: 1.2rem;
+        }
+        .poem-separator {
+            padding: 0 10px;
+            font-size: 1.8rem;
+        }
+    }
+</style>
+
+<script>
+    function setupPoems() {
+        const containers = document.querySelectorAll(".poem-entry");
+
+        containers.forEach((container) => {
+            const trigger = container.querySelector(".poem-trigger");
+            trigger?.addEventListener("click", () => {
+                const isActive = container.classList.contains("item-active");
+
+                // Close others
+                // containers.forEach(c => c.classList.remove('item-active'));
+
+                if (isActive) {
+                    container.classList.remove("item-active");
+                } else {
+                    container.classList.add("item-active");
+                }
+            });
+        });
+    }
+
+    // Initialize
+    setupPoems();
+    document.addEventListener("astro:page-load", setupPoems);
+</script>
