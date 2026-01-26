@@ -177,10 +177,37 @@ const { lang } = Astro.props;
 		max-width: 1200px;
 		margin: 0 auto;
 		padding: 0 20px;
+		transition: max-width 0.3s ease;
 	}
 
 	.section-padding {
 		padding: 100px 0;
+		transition: padding 0.3s ease;
+	}
+
+	/* Large Screen Scaling */
+	@media (min-width: 1440px) {
+		:root {
+			font-size: 18px; /* Scales all rem units */
+		}
+		.container {
+			max-width: 1400px;
+		}
+		.section-padding {
+			padding: 140px 0;
+		}
+	}
+
+	@media (min-width: 2000px) {
+		:root {
+			font-size: 20px; /* Further scaling for ultra-wide */
+		}
+		.container {
+			max-width: 1800px;
+		}
+		.section-padding {
+			padding: 180px 0;
+		}
 	}
 
 	/* Scrollbar */
