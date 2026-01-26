@@ -49,7 +49,7 @@ import poemsData from "../data/poems.json";
 
     .poems-container {
         display: flex;
-        justify-content: flex-start;
+        justify-content: center;
         align-items: flex-start;
         flex-wrap: wrap;
         gap: 0;
@@ -57,26 +57,26 @@ import poemsData from "../data/poems.json";
 
     .poem-entry {
         display: block;
-        flex: 1 0 25%; /* Default: 4 per line, but can grow */
+        flex: 0 0 25%; /* Fixed width based on 4 per row */
         margin-bottom: 40px;
         min-width: 0;
     }
 
     /* Limits & Wrapping */
-    /* XXL/Desktop: 4 per line */
+    /* XXL/Desktop: 4 per row */
     @media (min-width: 1200px) {
         .poem-entry {
-            flex: 1 0 25%;
+            flex: 0 0 25%;
         }
         .poem-entry:nth-child(4n) .poem-separator {
             display: none;
         }
     }
 
-    /* Large Tablet / Desktop Small: 3 per line */
+    /* Large Tablet / Desktop Small: 3 per row */
     @media (min-width: 769px) and (max-width: 1199px) {
         .poem-entry {
-            flex: 1 0 33.333%;
+            flex: 0 0 33.333%;
         }
         /* Show all separators first to reset */
         .poem-entry .poem-separator {
@@ -90,7 +90,7 @@ import poemsData from "../data/poems.json";
     /* Mobile/Tablet: 2 per line */
     @media (min-width: 481px) and (max-width: 768px) {
         .poem-entry {
-            flex: 1 0 50%;
+            flex: 0 0 50%;
         }
         .poem-entry .poem-separator {
             display: block;
@@ -103,7 +103,7 @@ import poemsData from "../data/poems.json";
     /* Tiny screens: 1 per line */
     @media (max-width: 480px) {
         .poem-entry {
-            flex: 1 0 100%;
+            flex: 0 0 100%;
             margin-bottom: 20px;
         }
         /* Hide ALL separators since they are on separate lines */
