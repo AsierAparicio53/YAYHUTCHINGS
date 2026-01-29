@@ -1,50 +1,89 @@
 ---
 import poemsData from "../data/poems.json";
+import { useTranslations } from "../i18n/utils";
+const lang = Astro.props.lang || "es";
+const t = useTranslations(lang);
 ---
 
 <section id="poemas" class="section-padding poems-section">
     <div class="container">
-        <div class="poems-container">
-            {
-                poemsData.map((poem, index) => (
-                    <div class="poem-entry" data-index={index}>
-                        <div class="poem-wrapper">
-                            <div class="poem-item">
-                                <button class="poem-trigger">
-                                    <span class="poem-title">{poem.title}</span>
-                                    <span class="poem-arrow">v</span>
-                                </button>
-                                <div class="poem-content">
-                                    <div class="poem-inner">
-                                        {poem.content
-                                            .split("\n")
-                                            .map((line) => (
-                                                <p>{line}</p>
-                                            ))}
-                                    </div>
+        <div class="section-header">
+            <span class="eyebrow">{t("poems.eyebrow")}</span>
+            <h2>
+                {t("poems.title")}
+            </h2>
+        </div>
+    </div>
+    <div class="poems-container">
+        {
+            poemsData.map((poem, index) => (
+                <div class="poem-entry" data-index={index}>
+                    <div class="poem-wrapper">
+                        <div class="poem-item">
+                            <button class="poem-trigger">
+                                <span class="poem-title">{poem.title}</span>
+                                <span class="poem-arrow">→</span>
+                            </button>
+                            <div class="poem-hidden-content">
+                                <div class="poem-inner">
+                                    {poem.content.split("\n").map((line) => (
+                                        <p>{line}</p>
+                                    ))}
                                 </div>
                             </div>
                         </div>
                     </div>
-                ))
-            }
-        </div>
+                </div>
+            ))
+        }
     </div>
 </section>
 
+<!-- Poem Modal -->
+<div id="poem-modal" class="poem-modal" tabindex="-1">
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+        <button class="modal-close" aria-label="Cerrar">&times;</button>
+        <div class="modal-body">
+            <!-- Modal content injected via JS -->
+        </div>
+    </div>
+</div>
+
 <style>
     .poems-section {
-        background: var(--color-bg);
+        background: var(--color-bg-soft);
         padding-top: 40px;
         padding-bottom: 80px;
         overflow: hidden;
+        transition: background-color 0.3s ease;
     }
 
-    .poems-header-line {
-        width: 100%;
-        height: 2px;
-        background: var(--color-text);
+    .section-header {
         margin-bottom: 60px;
+        text-align: center;
+    }
+
+    .eyebrow {
+        font-family: var(--font-sans);
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--color-accent);
+        font-size: 0.8rem;
+        margin-bottom: 20px;
+        display: block;
+    }
+
+    h2 {
+        font-size: 3.5rem;
+        margin-bottom: 40px;
+        line-height: 1.1;
+        color: var(--color-text);
+    }
+
+    .accent-text {
+        font-style: italic;
+        color: var(--color-text-muted);
     }
 
     .poems-container {
@@ -57,58 +96,37 @@ import poemsData from "../data/poems.json";
 
     .poem-entry {
         display: block;
-        flex: 0 0 25%; /* Fixed width based on 4 per row */
+        flex: 0 0 25%;
         margin-bottom: 40px;
         min-width: 0;
     }
 
     /* Limits & Wrapping */
-    /* XXL/Desktop: 4 per row */
     @media (min-width: 1200px) {
         .poem-entry {
             flex: 0 0 25%;
         }
-        .poem-entry:nth-child(4n) .poem-separator {
-            display: none;
-        }
     }
 
-    /* Large Tablet / Desktop Small: 3 per row */
     @media (min-width: 769px) and (max-width: 1199px) {
         .poem-entry {
             flex: 0 0 33.333%;
         }
-        /* Show all separators first to reset */
-        .poem-entry .poem-separator {
-            display: block;
-        }
-        .poem-entry:nth-child(3n) .poem-separator {
-            display: none;
-        }
     }
 
-    /* Mobile/Tablet: 2 per line */
     @media (min-width: 481px) and (max-width: 768px) {
         .poem-entry {
             flex: 0 0 50%;
         }
-        .poem-entry .poem-separator {
-            display: block;
-        }
-        .poem-entry:nth-child(2n) .poem-separator {
-            display: none;
-        }
     }
 
-    /* Tiny screens: 1 per line */
     @media (max-width: 480px) {
         .poem-entry {
             flex: 0 0 100%;
             margin-bottom: 20px;
         }
-        /* Hide ALL separators since they are on separate lines */
-        .poem-entry .poem-separator {
-            display: none;
+        h2 {
+            font-size: 2.5rem;
         }
     }
 
@@ -121,118 +139,275 @@ import poemsData from "../data/poems.json";
     .poem-item {
         flex: 1;
         position: relative;
+        padding: 0 20px;
     }
 
     .poem-trigger {
         width: 100%;
         background: none;
         border: none;
-        padding: 10px 0;
+        padding: 15px 0;
         cursor: pointer;
         display: flex;
         align-items: center;
-        justify-content: flex-start;
-        gap: 15px;
+        justify-content: center;
         font-family: var(--font-serif);
-        font-size: 1.6rem;
+        font-size: 1.4rem;
         color: var(--color-text);
-        text-align: left;
-        transition: color 0.3s ease;
+        text-align: center;
+        transition: all 0.3s ease;
         position: relative;
     }
 
-    /* Underline style from image */
     .poem-trigger::after {
         content: "";
         position: absolute;
         bottom: 0;
         left: 0;
-        width: 80%;
+        width: 100%;
         height: 1px;
-        background: var(--color-text);
-        opacity: 0.3;
+        background: var(--color-accent);
+        opacity: 0.2;
+        transition:
+            opacity 0.3s ease,
+            height 0.3s ease;
     }
 
     .poem-trigger:hover {
         color: var(--color-accent);
     }
 
+    .poem-trigger:hover::after {
+        opacity: 0.8;
+        height: 2px;
+    }
+
     .poem-title {
         white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding: 0 40px; /* Space for arrow */
     }
 
     .poem-arrow {
-        font-size: 0.9rem;
-        transition: transform 0.3s ease;
-        margin-left: 5px;
+        position: absolute;
+        right: 15px; /* Stay pinned to the right */
+        font-size: 1.1rem;
+        opacity: 0.5;
+        transition: all 0.3s ease;
     }
 
-    .item-active .poem-arrow {
-        transform: rotate(180deg);
+    .poem-trigger:hover .poem-arrow {
+        transform: translateX(5px);
+        opacity: 1;
+        color: var(--color-accent);
     }
 
-    .poem-content {
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    .poem-hidden-content {
+        display: none;
+    }
+
+    /* --- Modal Styles --- */
+    .poem-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
         width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 3000;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        padding: 20px;
+        outline: none;
     }
 
-    .item-active .poem-content {
-        max-height: 500px; /* Adjust as needed */
+    .poem-modal.modal-active {
+        opacity: 1;
+        visibility: visible;
     }
 
-    .poem-inner {
-        padding: 25px 0;
+    .modal-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(12px);
+    }
+
+    :root[data-theme="light"] .modal-overlay {
+        background: rgba(255, 255, 255, 0.7);
+    }
+
+    .modal-content {
+        position: relative;
+        background: var(--color-bg);
+        width: 100%;
+        max-width: 650px;
+        max-height: 85vh;
+        border: 1px solid var(--color-accent-glow);
+        border-radius: 12px;
+        padding: 60px 40px;
+        overflow-y: auto;
+        transform: scale(0.95) translateY(20px);
+        transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+    }
+
+    :root[data-theme="light"] .modal-content {
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.1);
+    }
+
+    .modal-active .modal-content {
+        transform: scale(1) translateY(0);
+    }
+
+    .modal-close {
+        position: absolute;
+        top: 25px;
+        right: 25px;
+        background: none;
+        border: none;
+        color: var(--color-text);
+        font-size: 2.2rem;
+        cursor: pointer;
+        line-height: 1;
+        opacity: 0.6;
+        transition: all 0.3s ease;
+        z-index: 10;
+    }
+
+    .modal-close:hover {
+        opacity: 1;
+        transform: rotate(90deg);
+        color: var(--color-accent);
+    }
+
+    .modal-body {
+        opacity: 0;
+        transform: translateY(10px);
+        transition: all 0.5s ease 0.2s;
+    }
+
+    .modal-active .modal-body {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    :global(.modal-title) {
+        font-family: var(--font-serif);
+        font-size: 2.8rem;
+        margin-bottom: 40px;
+        text-align: center;
+        color: var(--color-text);
+        position: relative;
+        padding-bottom: 20px;
+    }
+
+    :global(.modal-title::after) {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 2px;
+        background: var(--color-accent);
+    }
+
+    :global(.modal-text) {
         font-family: var(--font-serif);
         font-style: italic;
-        line-height: 1.7;
-        color: var(--color-text-muted);
-        font-size: 1.1rem;
-    }
-
-    .poem-inner p {
-        margin-bottom: 0.5rem;
-    }
-
-    .poem-separator {
-        font-family: var(--font-serif);
-        font-size: 2.2rem;
-        padding: 0 20px;
+        font-size: 1.3rem;
+        line-height: 1.9;
         color: var(--color-text);
-        opacity: 0.6;
-        user-select: none;
+        text-align: center;
+        max-width: 450px;
+        margin: 0 auto;
     }
 
-    @media (max-width: 480px) {
+    :global(.modal-text p) {
+        margin-bottom: 0.8rem;
+    }
+
+    @media (max-width: 640px) {
+        .modal-content {
+            padding: 50px 25px;
+        }
+        :global(.modal-title) {
+            font-size: 2rem;
+        }
+        :global(.modal-text) {
+            font-size: 1.15rem;
+        }
         .poem-trigger {
             font-size: 1.2rem;
-        }
-        .poem-separator {
-            padding: 0 10px;
-            font-size: 1.8rem;
         }
     }
 </style>
 
 <script>
     function setupPoems() {
-        const containers = document.querySelectorAll(".poem-entry");
+        const triggers = document.querySelectorAll(".poem-trigger");
+        const modal = document.getElementById(
+            "poem-modal",
+        ) as HTMLElement | null;
+        const modalBody = modal?.querySelector(
+            ".modal-body",
+        ) as HTMLElement | null;
+        const closeBtn = modal?.querySelector(
+            ".modal-close",
+        ) as HTMLElement | null;
+        const overlay = modal?.querySelector(
+            ".modal-overlay",
+        ) as HTMLElement | null;
 
-        containers.forEach((container) => {
-            const trigger = container.querySelector(".poem-trigger");
-            trigger?.addEventListener("click", () => {
-                const isActive = container.classList.contains("item-active");
+        function openModal(title: string, content: string) {
+            if (!modal || !modalBody) return;
 
-                // Close others
-                // containers.forEach(c => c.classList.remove('item-active'));
+            modalBody.innerHTML = `
+                <h2 class="modal-title">${title}</h2>
+                <div class="modal-text">${content}</div>
+            `;
 
-                if (isActive) {
-                    container.classList.remove("item-active");
-                } else {
-                    container.classList.add("item-active");
+            modal.classList.add("modal-active");
+            document.body.style.overflow = "hidden";
+
+            modal.focus();
+        }
+
+        function closeModal() {
+            if (!modal) return;
+            modal.classList.remove("modal-active");
+            document.body.style.overflow = "";
+        }
+
+        triggers.forEach((trigger) => {
+            trigger.addEventListener("click", () => {
+                const entry = trigger.closest(".poem-entry");
+                if (!entry) return;
+
+                const titleEl = entry.querySelector(".poem-title");
+                const innerEl = entry.querySelector(".poem-inner");
+
+                if (titleEl && innerEl) {
+                    const title = titleEl.textContent || "";
+                    const content = innerEl.innerHTML;
+                    openModal(title, content);
                 }
             });
+        });
+
+        closeBtn?.addEventListener("click", closeModal);
+        overlay?.addEventListener("click", closeModal);
+
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") closeModal();
         });
     }
 
